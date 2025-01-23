@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+
 # GitHub API URL
 API_URL="https://api.github.com"
 
@@ -25,7 +27,8 @@ function list_users_with_read_access {
     local endpoint="repos/${REPO_OWNER}/${REPO_NAME}/collaborators"
 
     # Fetch the list of collaborators on the repository
-    collaborators="$(github_api_get "$endpoint" | jq -r '.[] | select(.permissions.pull == true) | .login')"
+   collaborators="$(github_api_get "$endpoint" | jq -r '.[] | select(.permissions.pull == true) | "\(.login) \(.id)"')"
+
 
     # Display the list of collaborators with read access
     if [[ -z "$collaborators" ]]; then
@@ -36,7 +39,51 @@ function list_users_with_read_access {
     fi
 }
 
+
+function Helper {
+
+  expected_cmd_args=2
+
+if [ $# -ne $expected_cmd_args ] ; then
+	echo "Please input the right number of command line arguments"
+
+fi
+
+}
+
+
+
+Helper "$@"   #Invoking Helper function
+
+
+####Without "$@":
+
+# If you omit "$@", the Helper function won't receive the script's arguments.
+# Inside Helper, $# (the argument count) will always be 0, causing your logic to fail.
+
+
+
 # Main script
 
 echo "Listing users with read access to ${REPO_OWNER}/${REPO_NAME}..."
 list_users_with_read_access
+
+
+
+
+
+
+
+#Additional Comments
+#[[ ... ]]: A conditional test used in bash scripting to evaluate expressions.
+# -z: A test operator that checks if the given string is of zero length (empty).
+# "$collaborators": Refers to the value stored in the collaborators variable.
+# If collaborators is empty or unset, the test returns true.
+##
+##
+##
+#
+#
+#
+#
+#
